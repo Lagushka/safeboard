@@ -6,7 +6,7 @@ export default function ListElement(props) {
   return (
     <div className="list__item">
       <form action="">
-        <input type="checkbox" checked={employee.checked} onChange={() => props.handleChange(props.index)} name="" id="" />
+        <input type="checkbox" checked={employee.checked} onChange={() => props.handleChange(employee.id)} name="" id="" />
       </form>
       <span>{ employee.name }</span>
       <span>{ employee.account }</span>

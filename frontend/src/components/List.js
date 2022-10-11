@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import axios from "axios";
 import ListElement from "./ListElement.js";
+import Menu from "./Menu.js";
 
 const ACTIONS = {
   SET_ARRAY: 'SET-ARRAY',
@@ -25,6 +26,7 @@ export default function List() {
     group: useRef(null),
     phone: useRef(null)
   };
+  const [searchTerm, setSearchTerm] = useState("");
 
   function reducer(state, action) {
     switch (action.type) {
@@ -36,9 +38,9 @@ export default function List() {
           checked: action.payload
         }));
       case ACTIONS.SELECT_ONE:
-        return state.map((element, index) => index === action.payload ? ({
+        return state.map(element => element.id === action.payload ? ({
           ...element,
-          checked: !state[action.payload].checked
+          checked: !element.checked
         }) : element);
     }
   }
@@ -46,10 +48,6 @@ export default function List() {
   function handleChangeAll() {
     dispatch({type: ACTIONS.SELECT_ALL, payload: !checkAll});
     setCheckAll(!checkAll);
-  }
-
-  function handleChange(index) {
-    dispatch({type: ACTIONS.SELECT_ONE, payload: index});
   }
 
   function sortEmployees(property) {
@@ -118,18 +116,26 @@ export default function List() {
 
   return (
     <div className="list">
+      <Menu setSearchTerm={setSearchTerm} />
       <div className="list__head">
         <form action="">
           <input type="checkbox" checked={checkAll} onChange={() => handleChangeAll()} name="" id="" />
         </form>
-        <button onClick={ () => sortEmployees('name') } ref={buttonElements.name} ><span>Полное имя</span></button>
+        <button onClick={ () => sortEmployees('name') } ref={buttonElements.name}><span>Полное имя</span></button>
         <button onClick={ () => sortEmployees('account') } ref={buttonElements.account}><span>Учетная запись</span></button>
         <button onClick={ () => sortEmployees('email') } ref={buttonElements.email}><span>Электронная почта</span></button>
         <button onClick={ () => sortEmployees('group') } ref={buttonElements.group}><span>Группа</span></button>
         <button onClick={ () => sortEmployees('phone') } ref={buttonElements.phone}><span>Номер телефона</span></button>
       </div>
-      {employeesList.map((employee, index) => 
-        <ListElement key={employee.id} employee={employee} handleChange={handleChange} index={index} />
+      
+      {employeesList.filter((element) => {
+        if (searchTerm == "") {
+          return true
+        } else {
+          return `${element.name} ${element.account} ${element.email} ${element.group} ${element.phone.replace(" ", "")}`.toLowerCase().includes(searchTerm.toLowerCase())
+        }
+      }).map(employee => 
+        <ListElement key={employee.id} employee={employee} handleChange={() => dispatch({type: ACTIONS.SELECT_ONE, payload: employee.id})} />
       )}
     </div>
   );

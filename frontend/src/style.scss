@@ -3,6 +3,7 @@
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
+  
   .App {
     display: flex;
     justify-content: center;
@@ -19,21 +20,43 @@ body {
         height: 40px;
         align-items: center;
         grid-template-columns: 30px 220px 300px 350px 250px auto;
-
-        span {
-          display: block;
-        }
       }
 
       &__head {
         background-color: #D4E7D7;
-        color: #6B6B6B;
         border-radius: 0 0 7px 7px;
+
+        button {
+          background-color: inherit;
+          height: inherit;
+          border: none;
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          width: 90%;
+          border-radius: 10px;
+
+
+          &:hover, &:focus {
+            box-shadow: 0px 0 10px 1px  #5C7861;
+          }
+
+          span {
+            color: #6B6B6B;
+            font-size: 14px;
+            margin-left: 5px;
+          }
+        }
       }
 
       &__item {
         &:nth-child(2n+1) {
           background-color: #EAEAEA;
+        }
+
+        span {
+          display: block;
         }
       }
     }

@@ -8,8 +8,8 @@ export default function ListElement(props) {
       <form action="">
         <input type="checkbox" checked={employee.checked} onChange={() => props.handleChange(props.index)} name="" id="" />
       </form>
-      <span>{ `${employee.first_name} ${employee.last_name}` }</span>
-      <span>{ `companydomain/${employee.first_name}${employee.last_name}` }</span>
+      <span>{ employee.name }</span>
+      <span>{ employee.account }</span>
       <span>{ employee.email }</span>
       <span>{ employee.group ? employee.group : "Unmanaged" }</span>
       <span>{ employee.phone }</span>

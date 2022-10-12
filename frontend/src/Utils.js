@@ -1,4 +1,5 @@
 import React from "react";
+import Group from "./components/Group/Group";
 import { ACTIONS } from "./components/List/List";
 
 export const getSortedEmployees = function(employees, property, order) {
@@ -26,13 +27,29 @@ export const getSortedEmployees = function(employees, property, order) {
 }
 
 export const displayData = function(array, searchTerm, dispatch, ListElement, view) {
-  return array.filter((element) => {
+  const selectedEmployees = array.filter((element) => {
     if (searchTerm == "") {
       return true
     } else {
       return `${element.name} ${element.account} ${element.email} ${element.group} ${element.phone.replace(" ", "")}`.toLowerCase().includes(searchTerm.toLowerCase().trim())
     }
-  }).map(employee => 
-    <ListElement key={ employee.id } employee={ employee } handleChange={ () => dispatch({type: ACTIONS.SELECT_ONE, payload: employee.id}) } view={ view } />
-  )
+  })
+  if (view !== "groups") {
+    return selectedEmployees.map(employee => 
+      <ListElement key={ employee.id } employee={ employee } handleChange={ () => dispatch({type: ACTIONS.SELECT_ONE, payload: employee.id}) } view={ view } />
+    )
+  } else {
+    const groups = {};
+    for (let element of selectedEmployees) {
+      if (groups[element.group]) {
+        groups[element.group].push(element);
+      } else {
+        groups[element.group] = [element];
+      }
+    }
+
+    return Object.keys(groups).map((key) => 
+      <Group key={key} group={ groups[key] } name={ groups[key][0].group } dispatch={dispatch} view={ view } />
+    )
+  }
 }

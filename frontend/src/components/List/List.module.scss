@@ -1,0 +1,52 @@
+.listPage {  
+  margin-top: 20px;
+  box-shadow: 0 0 20px #EDEDED;
+  width: 1330px;
+
+  .list_table {
+    display: flex;
+    flex-direction: column;
+    
+    &__head {
+      padding: 0 15px 0 15px;
+      display: grid;
+      height: 40px;
+      align-items: center;
+      grid-template-columns: 30px 220px 300px 350px 250px auto;
+      background-color: #D4E7D7;
+      border-radius: 0 0 0 7px;
+      position: relative;
+      z-index: 1;
+
+      button {
+        background-color: inherit;
+        height: inherit;
+        border: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        width: 90%;
+        border-radius: 10px;
+
+
+        &:hover {
+          box-shadow: 0px 0 10px 1px  #5C7861;
+        }
+
+        span {
+          color: #6B6B6B;
+          font-size: 14px;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+
+  .list_tiles {
+    margin: 0 30px 0 30px;
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    gap: 60px;
+  }
+}

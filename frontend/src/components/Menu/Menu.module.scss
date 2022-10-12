@@ -1,0 +1,39 @@
+.menu {
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding-left: 30px;
+  width: inherit;
+  box-sizing: border-box;
+
+  input[type="checkbox"] {
+    margin-right: 15px;
+  }
+  
+  input[type="text"] {
+    font-size: 18px;
+    line-height: 30px;
+    padding-left: 7px;
+    background-color: #F8F8F8;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    height: 35px;
+
+    &:focus {
+      border-bottom: 3px solid #9DDCA8;
+    }
+  }
+
+  .openViews {
+    width: fit-content;
+    height: fit-content;
+    padding: 0;
+    border: 0;
+    margin-right: 10px;
+    background: none;
+  }
+}

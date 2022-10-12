@@ -1,0 +1,62 @@
+.item_table {
+  padding: 0 15px 0 15px;
+  display: grid;
+  height: 40px;
+  align-items: center;
+  grid-template-columns: 30px 220px 300px 350px 250px auto;
+
+  &:nth-child(2n+1) {
+    background-color: #EAEAEA;
+  }
+
+  &:has(> input:checked) {
+    background-color: #E0F5FF;
+  }
+
+  span {
+    display: block;
+  }
+}
+
+.item_tiles {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: 300px;
+  align-items: flex-start;
+  background-color: #EAEAEA;
+
+  &:has(> input:checked) {
+    background-color: #E0F5FF;
+  }
+
+  input {
+    margin: 15px 0 0 15px;
+  }
+    
+  img {
+    align-self: center;
+  }
+
+  span {
+    width: 100%;
+    text-align: center;
+  }
+
+  .name {
+    font-weight: 700;
+    margin-top: 20px;
+  }
+
+  .group, .groupUnmanaged {
+    margin-top: 10px;
+  }
+
+  .groupUnmanaged {
+    font-weight: 700;
+  }
+
+  .phone {
+    margin-top: 15px;
+  }
+}

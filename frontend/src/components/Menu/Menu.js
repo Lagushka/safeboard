@@ -15,7 +15,7 @@ export default function Menu(props) {
       <button className={ classes.openViews } onClick={ () => setOpenViews(!openViews) }>
         <img src={ viewImage } alt="" width="50" />
       </button>
-      { openViews && <ViewsMenu hideMenu={ () => setOpenViews(!openViews) } setView={props.setView} /*createGroups={props.createGroups}*/ /> }
+      { openViews && <ViewsMenu hideMenu={ () => setOpenViews(!openViews) } setView={ props.setView } sortEmployees={ props.sortEmployees } setElementsEnd={ props.setElementsEnd } setGroupsEnd={ props.setGroupsEnd } /> }
     </div>
   )
 }

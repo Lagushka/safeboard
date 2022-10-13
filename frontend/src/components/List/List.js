@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ListElement from "../ListElement/ListElement";
 import Menu from "../Menu/Menu";
@@ -6,14 +6,8 @@ import {formGroups, getSelectedEmployees, getSortedEmployees } from "../../utils
 import classes from "./List.module.scss";
 import Group from "../Group/Group";
 
-export const ACTIONS = {
-  SET_ARRAY: 'SET-ARRAY',
-  SELECT_ALL: 'SELECT-ALL',
-  SELECT_ONE: 'SELECT-ONE',
-}
-
-export default function List() {
-  const [employeesList, dispatch] = useReducer(reducer, []); 
+export default function List() { 
+  const [employeesList, setEmployeesList] = useState([]);
   const [checkAll, setCheckAll] = useState(false);
   const [order, setOrder] = useState({
     name: true,
@@ -24,37 +18,22 @@ export default function List() {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [view, setView] = useState("table");
-  // const [groups, setGroups] = useState({});
-
-  function reducer(state, action) {
-    switch (action.type) {
-      case ACTIONS.SET_ARRAY:
-        return action.payload;
-      case ACTIONS.SELECT_ALL: {
-        return state.map(element => ({
-          ...element,
-          checked: action.payload
-        }));
-      }
-      case ACTIONS.SELECT_ONE: {
-        return state.map(element => element.id === action.payload ? ({
-          ...element,
-          checked: !element.checked
-        }) : element);
-      }
-    }
-  }
+  const [elementsEnd, setElementsEnd] = useState(70);
+  const [groupsEnd, setGroupsEnd] = useState(20);
 
   function handleChangeAll() {
-    dispatch({type: ACTIONS.SELECT_ALL, payload: !checkAll});
+    setEmployeesList(employeesList.map(element => ({
+      ...element,
+      checked: !checkAll
+    })));
     setCheckAll(!checkAll);
-    // if (view == "groups") {
-    //   createGroups();
-    // }
   }
 
   function handleChange(id) {
-    dispatch({type: ACTIONS.SELECT_ONE, payload: id});
+    setEmployeesList(employeesList.map(element => element.id === id ? ({
+      ...element,
+      checked: !element.checked
+    }): element))
   }
 
   function sortEmployees(property) {
@@ -100,14 +79,45 @@ export default function List() {
           }
           return 0;
         });
-        dispatch({type: ACTIONS.SET_ARRAY, payload: data});
+        setEmployeesList(data);
       })
       .catch(error => console.err(error));
-  }, [])
+    
+  }, []);
+
+  window.onscroll = () => {
+    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight) {
+      if (employeesList.length >= elementsEnd + 70) {
+        setElementsEnd(elementsEnd + 70);
+      } else {
+        setElementsEnd(employeesList.length);
+      }
+      if (Object.keys(createGroups()).length >= groupsEnd + 20) {
+        setGroupsEnd(groupsEnd + 20)
+      } else {
+        setGroupsEnd(Object.keys(createGroups()).length);
+      }
+    }
+    console.log(groupsEnd);
+  };
 
   return (
     <div className={ classes.listPage }>
-      <Menu handleSearch={ handleSearch } setView={ setView } view={view} checkAll={checkAll} handleChangeAll={handleChangeAll} /*createGroups={createGroups}*/ />
+      <Menu handleSearch={ handleSearch } setView={ setView } view={ view } checkAll={ checkAll } handleChangeAll={ handleChangeAll } setGroupsEnd={ setGroupsEnd } setElementsEnd={ setElementsEnd } sortEmployees={ () => {
+        setOrder({
+          name: true,
+          account: false,
+          email: false,
+          group: false,
+          phone: false,
+        })
+        getSortedEmployees(employeesList, "name", {
+          name: false,
+          account: false,
+          email: false,
+          group: false,
+          phone: false,
+        })} } />
       <div className={ classes[`list_${view}`]}>
         { view == "table" &&
           <div className={ classes[`list_${view}__head`] }>
@@ -121,11 +131,11 @@ export default function List() {
         }
         
         { view !== "groups" ?
-          getSelectedEmployees(employeesList, searchTerm).map(employee => 
+          getSelectedEmployees(employeesList, searchTerm).slice(0, elementsEnd).map(employee => 
             <ListElement key={ employee.id } employee={ employee } handleChange={ () => handleChange(employee.id) } view={ view } />
-          )
+        )
           : 
-          Object.keys(createGroups()).map(key =>
+          Object.keys(createGroups()).slice(0, groupsEnd).map(key =>
             <Group key={key} group={ createGroups()[key] } name={ createGroups()[key][0].group } handleChange={handleChange} view={ view } />
           )
         }

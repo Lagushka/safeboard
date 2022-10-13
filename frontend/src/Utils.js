@@ -33,8 +33,8 @@ export const getSelectedEmployees = function(array, searchTerm) {
 }
 
 export const formGroups = function(selectedEmployees) {
-  let groups = {};
-  for (let element of selectedEmployees) {
+  const groups = {};
+  for (const element of selectedEmployees) {
     if (groups[element.group]) {
       groups[element.group].push(element);
     } else if (element.group !== null) {

@@ -1,10 +1,13 @@
 import React from "react";
 import styles from "./ViewsMenu.module.scss";
 
-export default function ViewsMenu({hideMenu, setView, }) {
+export default function ViewsMenu(props) {
   function handleClick(property) {
-    hideMenu();
-    setView(property);
+    props.hideMenu();
+    props.setView(property);
+    props.sortEmployees();
+    props.setElementsEnd(70);
+    props.setGroupsEnd(20);
   }
 
   return (

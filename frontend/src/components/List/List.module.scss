@@ -49,4 +49,11 @@
     grid-template-columns: repeat(5, auto);
     gap: 60px;
   }
+
+  .list_groups {
+    margin: 0 30px 0 30px;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 30px;
+  }
 }

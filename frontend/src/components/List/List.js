@@ -1,9 +1,10 @@
 import React, { useEffect, useReducer, useState } from "react";
 import axios from "axios";
-import ListElement from "../ListElement/ListElement.js";
-import Menu from "../Menu/Menu.js";
-import { displayData, getSortedEmployees } from "../../Utils.js";
-import styles from "./List.module.scss";
+import ListElement from "../ListElement/ListElement";
+import Menu from "../Menu/Menu";
+import {formGroups, getSelectedEmployees, getSortedEmployees } from "../../utils";
+import classes from "./List.module.scss";
+import Group from "../Group/Group";
 
 export const ACTIONS = {
   SET_ARRAY: 'SET-ARRAY',
@@ -23,32 +24,40 @@ export default function List() {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [view, setView] = useState("table");
+  // const [groups, setGroups] = useState({});
 
   function reducer(state, action) {
     switch (action.type) {
       case ACTIONS.SET_ARRAY:
         return action.payload;
-      case ACTIONS.SELECT_ALL:
+      case ACTIONS.SELECT_ALL: {
         return state.map(element => ({
           ...element,
           checked: action.payload
         }));
-      case ACTIONS.SELECT_ONE:
+      }
+      case ACTIONS.SELECT_ONE: {
         return state.map(element => element.id === action.payload ? ({
           ...element,
           checked: !element.checked
         }) : element);
+      }
     }
   }
 
   function handleChangeAll() {
     dispatch({type: ACTIONS.SELECT_ALL, payload: !checkAll});
     setCheckAll(!checkAll);
+    // if (view == "groups") {
+    //   createGroups();
+    // }
+  }
+
+  function handleChange(id) {
+    dispatch({type: ACTIONS.SELECT_ONE, payload: id});
   }
 
   function sortEmployees(property) {
-    // let bufferArray = employeesList;
-
     getSortedEmployees(employeesList, property, order);
     
     setOrder({
@@ -59,8 +68,14 @@ export default function List() {
       phone: false,
       [property]: !order[property]
     });
+  }
 
-    // dispatch({type: ACTIONS.SET_ARRAY, payload: bufferArray});
+  function createGroups() {
+    return formGroups(getSelectedEmployees(employeesList, searchTerm));
+  }
+
+  function handleSearch(input) {
+    setSearchTerm(input);
   }
 
   useEffect(() => {
@@ -87,15 +102,15 @@ export default function List() {
         });
         dispatch({type: ACTIONS.SET_ARRAY, payload: data});
       })
-      .catch(error => console.log(error));
+      .catch(error => console.err(error));
   }, [])
 
   return (
-    <div className={ styles.listPage }>
-      <Menu setSearchTerm={ setSearchTerm } setView={ setView } view={view} checkAll={checkAll} handleChangeAll={handleChangeAll} />
-      <div className={ styles[`list_${view}`]}>
+    <div className={ classes.listPage }>
+      <Menu handleSearch={ handleSearch } setView={ setView } view={view} checkAll={checkAll} handleChangeAll={handleChangeAll} /*createGroups={createGroups}*/ />
+      <div className={ classes[`list_${view}`]}>
         { view == "table" &&
-          <div className={ styles[`list_${view}__head`] }>
+          <div className={ classes[`list_${view}__head`] }>
             <input type="checkbox" checked={checkAll} onChange={() => handleChangeAll()} />
             <button onClick={ () => sortEmployees('name') }><span>Полное имя</span></button>
             <button onClick={ () => sortEmployees('account') }><span>Учетная запись</span></button>
@@ -105,7 +120,15 @@ export default function List() {
           </div>
         }
         
-        { displayData(employeesList, searchTerm, dispatch, ListElement, view) }
+        { view !== "groups" ?
+          getSelectedEmployees(employeesList, searchTerm).map(employee => 
+            <ListElement key={ employee.id } employee={ employee } handleChange={ () => handleChange(employee.id) } view={ view } />
+          )
+          : 
+          Object.keys(createGroups()).map(key =>
+            <Group key={key} group={ createGroups()[key] } name={ createGroups()[key][0].group } handleChange={handleChange} view={ view } />
+          )
+        }
       </div>
     </div>
   );

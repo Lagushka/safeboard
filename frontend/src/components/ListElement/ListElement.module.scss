@@ -60,3 +60,35 @@
     margin-top: 15px;
   }
 }
+
+.item_groups {
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  border: 1px solid #969696;
+  margin-top: 15px;
+  padding: 25px 20px 15px 20px;
+  box-shadow: 0 0 10px #D5D5D5;
+
+  &:has(> input:checked) {
+    background-color: #E0F5FF;
+    box-shadow: 0 0 10px #9DAEB5;
+    border-color: #627D8A;
+  }
+  
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .name {
+    font-size: 18px;
+  }
+
+  .group {
+    color: #747474;
+  }
+}

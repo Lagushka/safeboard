@@ -6,9 +6,7 @@ export default function Home() {
   return (
     <div className={classes.home}>
       <h1>Employees list</h1>
-      <button>
-        <Link to="/list">Go to List</Link>
-      </button>
+        <Link to="/list"><button>Go to list</button></Link>
     </div>
   );
 }

@@ -8,6 +8,7 @@ export default function ViewsMenu(props) {
     props.sortEmployees();
     props.setElementsEnd(70);
     props.setGroupsEnd(20);
+    window.scrollTo(0, 0);
   }
 
   return (

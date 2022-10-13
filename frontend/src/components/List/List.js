@@ -5,6 +5,7 @@ import Menu from "../Menu/Menu";
 import {formGroups, getSelectedEmployees, getSortedEmployees } from "../../utils";
 import classes from "./List.module.scss";
 import Group from "../Group/Group";
+import scrollToTop from "./up.svg";
 
 export default function List() { 
   const [employeesList, setEmployeesList] = useState([]);
@@ -61,7 +62,7 @@ export default function List() {
     axios.get('http://localhost:3000/list')
       .then(response => {
         const {data} = response;
-        for (let element of data) {
+        for (const element of data) {
           element.first_name.replace(" ", "");
           element.last_name.replace(" ", "");
           element.email.replace(" ", "");
@@ -121,7 +122,7 @@ export default function List() {
       <div className={ classes[`list_${view}`]}>
         { view == "table" &&
           <div className={ classes[`list_${view}__head`] }>
-            <input type="checkbox" checked={checkAll} onChange={() => handleChangeAll()} />
+            <input type="checkbox" checked={ checkAll } onChange={ () => handleChangeAll() } />
             <button onClick={ () => sortEmployees('name') }><span>Полное имя</span></button>
             <button onClick={ () => sortEmployees('account') }><span>Учетная запись</span></button>
             <button onClick={ () => sortEmployees('email') }><span>Электронная почта</span></button>
@@ -140,6 +141,9 @@ export default function List() {
           )
         }
       </div>
+      <button className={ classes.scrollToTopButton } onClick={ () => window.scrollTo(0, 0) }> 
+        <img src={scrollToTop} alt="" /> 
+      </button>
     </div>
   );
 }

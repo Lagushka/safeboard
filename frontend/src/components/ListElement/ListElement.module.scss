@@ -3,7 +3,7 @@
   display: grid;
   height: 40px;
   align-items: center;
-  grid-template-columns: 30px 220px 300px 350px 250px auto;
+  grid-template-columns: 30px 220px 300px 330px 250px auto;
 
   &:nth-child(2n+1) {
     background-color: #EAEAEA;

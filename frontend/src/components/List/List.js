@@ -6,6 +6,8 @@ import {formGroups, getSelectedEmployees, getSortedEmployees } from "../../utils
 import classes from "./List.module.scss";
 import Group from "../Group/Group";
 import scrollToTop from "./up.svg";
+import sortDown from "./sort_down.svg";
+import sortUp from "./sort_up.svg";
 
 export default function List() { 
   const [employeesList, setEmployeesList] = useState([]);
@@ -21,6 +23,13 @@ export default function List() {
   const [view, setView] = useState("table");
   const [elementsEnd, setElementsEnd] = useState(70);
   const [groupsEnd, setGroupsEnd] = useState(20);
+  const [propertySorted, setPropertySorted] = useState({
+    name: true,
+    account: false,
+    email: false,
+    group: false,
+    phone: false
+  });
 
   function handleChangeAll() {
     setEmployeesList(employeesList.map(element => ({
@@ -47,6 +56,15 @@ export default function List() {
       group: false,
       phone: false,
       [property]: !order[property]
+    });
+
+    setPropertySorted({
+      name: false,
+      account: false,
+      email: false,
+      group: false,
+      phone: false,
+      [property]: true
     });
   }
 
@@ -111,7 +129,14 @@ export default function List() {
           email: false,
           group: false,
           phone: false,
-        })
+        });
+        setPropertySorted({
+          name: true,
+          account: false,
+          email: false,
+          group: false,
+          phone: false
+        });
         getSortedEmployees(employeesList, "name", {
           name: false,
           account: false,
@@ -123,11 +148,31 @@ export default function List() {
         { view == "table" &&
           <div className={ classes[`list_${view}__head`] }>
             <input type="checkbox" checked={ checkAll } onChange={ () => handleChangeAll() } />
-            <button onClick={ () => sortEmployees('name') }><span>Полное имя</span></button>
-            <button onClick={ () => sortEmployees('account') }><span>Учетная запись</span></button>
-            <button onClick={ () => sortEmployees('email') }><span>Электронная почта</span></button>
-            <button onClick={ () => sortEmployees('group') }><span>Группа</span></button>
-            <button onClick={ () => sortEmployees('phone') }><span>Номер телефона</span></button>
+            <button onClick={ () => sortEmployees('name') }>
+              <span>Полное имя</span>
+              { propertySorted.name && order.name && <img src={ sortUp } alt="" width="20" /> }
+              { propertySorted.name && !order.name && <img src={ sortDown } alt="" width="20" /> }
+            </button>
+            <button onClick={ () => sortEmployees('account') }>
+              <span>Учетная запись</span>
+              { propertySorted.account && order.account && <img src={ sortUp } alt="" width="20" /> }
+              { propertySorted.account && !order.account && <img src={ sortDown } alt="" width="20" /> }
+            </button>
+            <button onClick={ () => sortEmployees('email') }>
+              <span>Электронная почта</span>
+              { propertySorted.email && order.email && <img src={ sortUp } alt="" width="20" /> }
+              { propertySorted.email && !order.email && <img src={ sortDown } alt="" width="20" /> }
+            </button>
+            <button onClick={ () => sortEmployees('group') }>
+              <span>Группа</span>
+              { propertySorted.group && order.group && <img src={ sortUp } alt="" width="20" /> }
+              { propertySorted.group && !order.group && <img src={ sortDown } alt="" width="20" /> }
+            </button>
+            <button onClick={ () => sortEmployees('phone') }>
+              <span>Номер телефона</span>
+              { propertySorted.phone && order.phone && <img src={ sortUp } alt="" width="20" /> }
+              { propertySorted.phone && !order.phone && <img src={ sortDown } alt="" width="20" /> }
+            </button>
           </div>
         }
         
